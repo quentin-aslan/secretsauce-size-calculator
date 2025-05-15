@@ -1,5 +1,6 @@
 import type { Brand } from '$lib/types/brand';
 import type { Category } from '$lib/types/category';
+import type {Size} from "$lib/types/size";
 
 interface FetchBrandsResponse {
   brands: Brand[];
@@ -8,6 +9,10 @@ interface FetchBrandsResponse {
 interface FetchCategoriesResponse {
   brandId: string,
   categories: Category[];
+}
+
+interface FetchSizesResponse {
+  sizes: Size[];
 }
 
 const API_TOKEN = 'cXVlbnRpbjo3N2NhZDM0Mi0zYTIxLTRkMWEtOWFiMC1lMDdmYWQzOGY1YWU=';
@@ -50,3 +55,14 @@ export async function fetchCategories(brandId: string): Promise<Category[]> {
     name: category.name ?? ''
   })) ?? []
 }
+
+export async function fetchSizes(brandId: string, categoryId: string, measurement: number): Promise<Size[]> {
+  const sizeFromApi = await fetchWithAuth<FetchSizesResponse>(BASE_URL + '/sizes?' +
+      new URLSearchParams({ brand_id: brandId, category_id: categoryId, measurement: measurement.toString() }));
+
+  // Make sure the function returns valid data
+  return sizeFromApi?.sizes.map(size => ({
+    label: size.label ?? ''
+  })) ?? []
+}
+
