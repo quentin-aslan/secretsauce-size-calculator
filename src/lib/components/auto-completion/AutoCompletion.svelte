@@ -7,6 +7,7 @@
             id: string;
         }[],
         placeholder?: string;
+        disabled?: boolean;
         selected: string | null;
     }
 
@@ -78,12 +79,14 @@
     function showDropdown() {
         showSuggestions = true;
         highlightedIndex = -1;
+        input = ''
     }
 
     function hideDropdown() {
         setTimeout(() => { // I use `setTimeout` to prevent the blur event from closing the dropdown before clicking on a suggestion.
             showSuggestions = false;
             highlightedIndex = -1;
+            input = props.data.find(b => b.id === selected)?.name || ''; // If user didnt made a choice, display the last selected brand.
         }, 150);
     }
 
@@ -106,7 +109,8 @@
         onblur={hideDropdown}
         onkeydown={handleKeydown}
         placeholder={props.placeholder}
-        class="w-full p-2 min-w-[300px] bg-white text-gray-700 border-b-2 border-secondary focus:outline-none focus:border-secondary/80 placeholder:font-light"
+        disabled={props.disabled}
+        class="w-full p-2 min-w-[300px] bg-white text-gray-700 border-b-2 border-secondary focus:outline-none focus:border-secondary/80 placeholder:font-light disabled:bg-white/40 disabled:cursor-not-allowed"
     />
 
     <img src="{dropdown}" alt="Logo dropdown" class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4" />

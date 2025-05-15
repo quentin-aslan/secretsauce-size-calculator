@@ -4,6 +4,7 @@
     import type {Brand} from "$lib/types/brand";
     import type {Category} from "$lib/types/category";
     import AutoCompletion from "$lib/components/auto-completion/AutoCompletion.svelte";
+    import {fetchCategories} from "$lib/api/api";
 
     const brands: Brand[] = [
         {
@@ -32,55 +33,27 @@
         }
     ]
 
-    const categories: Category[] = [
-        {
-            "id": "activewear",
-            "name": "Activewear"
-        },
-        {
-            "id": "dresses",
-            "name": "Dresses"
-        },
-        {
-            "id": "jackets--and--blazers",
-            "name": "Jackets & Blazers"
-        },
-        {
-            "id": "jeans",
-            "name": "Jeans"
-        },
-        {
-            "id": "knits--and--sweaters",
-            "name": "Knits & Sweaters"
-        },
-        {
-            "id": "leggings",
-            "name": "Leggings"
-        },
-        {
-            "id": "outerwear",
-            "name": "Outerwear"
-        },
-        {
-            "id": "pants",
-            "name": "Pants"
-        },
-        {
-            "id": "shorts",
-            "name": "Shorts"
-        },
-        {
-            "id": "skirts",
-            "name": "Skirts"
-        },
-        {
-            "id": "tops",
-            "name": "Tops"
-        }
-    ]
+    let categories = $state<Category[]>([])
 
     let brandIdSelected = $state<string | null>(null)
     let categoryIdSelected = $state<string | null>(null)
+
+    let isCategoryAutoCompletionDisabled = $derived<boolean>(brandIdSelected === null ||  brandIdSelected === '')
+
+    // Fetch categories when the brandIdSelected changes
+    $effect(async () => {
+        if (brandIdSelected) {
+            try {
+                categories = await fetchCategories(brandIdSelected)
+                if (categories.length === 0) {
+                    alert(`Sorry, the size calculator is currently not available for ${brandIdSelected}`)
+                    brandIdSelected = null
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }
+    })
 </script>
 
 <div class="font-manrope max-w-sm p-4 bg-global-gray rounded-2xl shadow border border-[#E7E7E782]">
@@ -95,7 +68,7 @@
     <div class="px-4 py-3 flex flex-col gap-4">
         <AutoCompletion bind:selected={brandIdSelected} data={brands} placeholder="Select a brand" />
 
-        <AutoCompletion bind:selected={categoryIdSelected} data={categories} placeholder="Select a category" />
+        <AutoCompletion disabled={isCategoryAutoCompletionDisabled} bind:selected={categoryIdSelected} data={categories} placeholder="Select a category" />
 
         <div class="flex flex-row gap-2 items-center justify-center ">
             <span>My size is</span>
