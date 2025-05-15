@@ -4,10 +4,9 @@
     import type {Size} from "$lib/types/size";
     import SizeCalculatorResult from "$lib/components/size-calculator/SizeCalculatorResult.svelte";
 
-    let sizes = $state<Size[]>([{"label":"XS"},{"label":"0"}])
+    let sizes = $state<Size[]>([])
 
 </script>
-
 <div class="font-manrope max-w-sm min-w-sm bg-global-gray rounded-2xl shadow border border-gray-400">
     <!-- Header -->
     <SizeCalculatorHeader />

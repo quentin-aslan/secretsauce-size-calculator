@@ -15,6 +15,8 @@ interface FetchSizesResponse {
   sizes: Size[];
 }
 
+// SINCE It's a technical test and this tools is used by the final user, the API_TOKEN is not critical and can be here.
+// In a real project, it would be better to use a secure way to store the token, like a secure environment variable.
 const API_TOKEN = 'cXVlbnRpbjo3N2NhZDM0Mi0zYTIxLTRkMWEtOWFiMC1lMDdmYWQzOGY1YWU=';
 const BASE_URL = 'https://size-calculator-api.sspinc.io';
 

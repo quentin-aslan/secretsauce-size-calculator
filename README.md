@@ -1,23 +1,38 @@
-# Secret Sauce Size Calculator - Quentin Aslan Technical Assignment
+# Secret Sauce Size Calculator
 
-## Start the project
+### Installation
 
 ```bash
 npm install
 ```
 
-> Start built project
-```bash
-
-npm run build
-
-npm run preview
-```
+### Running the Application
 
 > Start in a development environment
 ```bash
 npm run dev
 ```
 
-### Technical Stacks
-**Svelte** and **SvelteKit** is the main framework used on this project. I used the CLI to initiate the project. https://svelte.dev/docs/kit/creating-a-project
+> Build and preview the production version
+```bash
+npm run build
+npm run preview
+```
+
+## Features
+
+- **Brand Selection**: Search and select from various clothing brands
+- **Category Selection**: Choose clothing categories based on the selected brand
+- **Size Calculation**: Calculate your size based on measurements in inches
+- **Responsive Design**: Works on both desktop and mobile devices
+
+## Project Structure
+
+- `/src/lib/components/size-calculator`: Core components for the size calculator
+- `/src/lib/api`: API integration for fetching brands, categories, and calculating sizes
+
+## Technical Stack
+
+- **Framework**: [Svelte](https://svelte.dev/) and [SvelteKit](https://kit.svelte.dev/)
+- **Styling**: [TailwindCSS](https://tailwindcss.com/)
+- **Language**: TypeScript

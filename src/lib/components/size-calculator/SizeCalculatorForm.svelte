@@ -13,18 +13,13 @@
 
     let { sizeReady }: Props = $props();
 
-    // Initialize with some default brands to show before user starts typing -> TODO: Discuss with the Nicolas if we want to keep this (and improve the list) or not
-    let brands = $state<Brand[]>([
-        {
-            "id": "gucci",
-            "name": "Gucci"
-        }
-    ])
+    // TODO: Discuss with the Nicolas if we want add some default value or not
+    let brands = $state<Brand[]>([])
     let categories = $state<Category[]>([])
     let measurement = $state<number | null>(null)
 
     let brandIdSelected = $state<string | null>(null)
-    let brandNameSelected = $derived<string, null>(brands.find(brand => brand.id === brandIdSelected)?.name ?? null)
+    let brandNameSelected = $derived<string | null>(brands.find(brand => brand.id === brandIdSelected)?.name ?? null)
     let categoryIdSelected = $state<string | null>(null)
 
     let isCategoryAutoCompletionDisabled = $derived<boolean>(brandIdSelected === null ||  brandIdSelected === '')
@@ -63,6 +58,10 @@
         try {
             const sizes = await fetchSizes(brandIdSelected, categoryIdSelected, measurement);
             sizeReady(sizes)
+
+            if (sizes.length === 0) {
+                alert(`Sorry, the size calculator is currently not available for ${brandNameSelected}`)
+            }
         } catch (e) {
             console.error('Error fetching sizes:', e);
         }
