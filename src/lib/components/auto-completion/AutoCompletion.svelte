@@ -9,6 +9,7 @@
         placeholder?: string;
         disabled?: boolean;
         selected: string | null;
+        onSearch?: (searchTerm: string) => void;
     }
 
     let { selected = $bindable(), ...props}: Props = $props();
@@ -82,6 +83,16 @@
         input = ''
     }
 
+    function handleInput(event: HTMLInputElement) {
+        showSuggestions = true;
+        highlightedIndex = -1;
+
+        // Call onSearch callback if provided
+        if (props.onSearch && event.target) {
+            props.onSearch(event.target.value);
+        }
+    }
+
     function hideDropdown() {
         setTimeout(() => { // I use `setTimeout` to prevent the blur event from closing the dropdown before clicking on a suggestion.
             showSuggestions = false;
@@ -104,7 +115,7 @@
     <input
         type="text"
         bind:value={input}
-        oninput={showDropdown}
+        oninput={handleInput}
         onfocus={showDropdown}
         onblur={hideDropdown}
         onkeydown={handleKeydown}

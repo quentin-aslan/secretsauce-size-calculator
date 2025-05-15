@@ -1,6 +1,10 @@
 import type { Brand } from '$lib/types/brand';
 import type { Category } from '$lib/types/category';
 
+interface FetchBrandsResponse {
+  brands: Brand[];
+}
+
 interface FetchCategoriesResponse {
   brandId: string,
   categories: Category[];
@@ -24,14 +28,16 @@ async function fetchWithAuth<T>(endpoint: string): Promise<T> {
   return response.json();
 }
 
-export async function fetchBrands(): Promise<Brand[]> {
-  const brandsFromApi = await fetchWithAuth<Brand[]>(BASE_URL + '/brands');
+export async function fetchBrands(brandPrefix: string): Promise<Brand[]> {
+  const brandsFromApi = await fetchWithAuth<FetchBrandsResponse>(BASE_URL + '/brands?' + new URLSearchParams({
+    name_prefix: brandPrefix
+  }));
 
   // Make sure the function returns valid data
-  return brandsFromApi.map(brand => ({
+  return brandsFromApi?.brands.map(brand => ({
     id: brand.id ?? '',
     name: brand.name ?? ''
-  }));
+  })) ?? []
 }
 
 export async function fetchCategories(brandId: string): Promise<Category[]> {
@@ -42,5 +48,5 @@ export async function fetchCategories(brandId: string): Promise<Category[]> {
   return categoriesFromApi?.categories.map(category => ({
     id: category.id ?? '',
     name: category.name ?? ''
-  }));
+  })) ?? []
 }
