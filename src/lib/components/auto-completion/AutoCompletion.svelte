@@ -7,13 +7,13 @@
             id: string;
         }[],
         placeholder?: string;
+        selected: string | null;
     }
 
-    let props: Props = $props();
+    let { selected = $bindable(), ...props}: Props = $props();
 
 
-    let input = $state('');
-    let selected: string | null = $state(null); // TODO: Emit to the parent component. -> I saw "debrief" in the documentation.
+    let input = $state(props.data.find(b => b.id === selected)?.name || '');
     let showSuggestions = $state(false);
 
     const filtered = $derived.by(() => {
@@ -34,7 +34,7 @@
         onfocus={() => (showSuggestions = true)}
         onblur={() => setTimeout(() => showSuggestions = false, 150)}
         placeholder={props.placeholder}
-        class="w-full p-2 bg-white text-gray-700 border-b-2 border-secondary focus:outline-none focus:border-secondary/80 placeholder:font-light"
+        class="w-full p-2 min-w-[300px] bg-white text-gray-700 border-b-2 border-secondary focus:outline-none focus:border-secondary/80 placeholder:font-light"
     />
 
     <img src="{dropdown}" alt="Logo dropdown" class="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4" />
